@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecampus E-Bike Rental</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+            background-image: url(""); /* Add your image source here */
+            background-size: cover;
+            background-position: center;
+        }
+        header {
+            background: url("/Users/nishan/Desktop/Plattsburgh pic.jpg") no-repeat center center/cover;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            margin: 20px;
+        }
+        .bike-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .bike {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 250px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .logo {
+            width: 150px;
+        }
+        .cart {
+            margin-top: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        select {
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        .header-right a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            background: #28a745;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        let cartCount = 0;
+        function addToCart(bike, price) {
+            if (cartCount >= 1) {
+                alert("You can only rent one bike at a time. Remove the current selection to add another.");
+                return;
+            }
+            const pickupLocation = document.getElementById("pickup-location").value;
+            const dropoffLocation = document.getElementById("dropoff-location").value;
+            
+            if (!pickupLocation || !dropoffLocation) {
+                alert("Please select both pickup and drop-off locations.");
+                return;
+            }
+            
+            cartCount = 1;
+            document.getElementById("cart-count").innerText = cartCount;
+            alert(`${bike} added to cart. Pickup: ${pickupLocation}, Drop-off: ${dropoffLocation}`);
+            updateCart(bike, price, pickupLocation, dropoffLocation);
+        }
+        function removeFromCart() {
+            cartCount = 0;
+            document.getElementById("cart-count").innerText = cartCount;
+            updateCart();
+        }
+        function updateCart(bike = null, price = null, pickupLocation = null, dropoffLocation = null) {
+            let cartItems = document.getElementById("cart-items");
+            cartItems.innerHTML = "";
+            if (bike) {
+                let li = document.createElement("li");
+                li.innerText = `${bike} - $${price}/hour (Pickup: ${pickupLocation}, Drop-off: ${dropoffLocation})`;
+                cartItems.appendChild(li);
+                let removeBtn = document.createElement("button");
+                removeBtn.innerText = "Remove";
+                removeBtn.onclick = removeFromCart;
+                cartItems.appendChild(removeBtn);
+            }
+        }
+        function proceedToPayment() {
+            if (cartCount > 0) {
+                window.location.href = "payment.html";
+            } else {
+                alert("Your cart is empty!");
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <img src="/Users/nishan/Desktop/ampus Bike.png" alt="Ecampus Bike Logo" class="logo">
+        <span>Ecampus E-Bike Rental</span>
+        <div class="header-right">
+            <a href="#">Cart (<span id="cart-count">0</span>)</a>
+            <a href="https://www.plattsburgh.edu/portal/">Log in</a>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Rent an E-Bike for Easy Campus Travel</h2>
+        <label for="pickup-location">Pick-up Location:</label>
+        <select id="pickup-location">
+            <option value="">Select Pickup Location</option>
+            <option value="Angel College Center">Angel College Center</option>
+            <option value="Wilson Hall">Wilson Hall</option>
+            <option value="Hawkins Hall">Hawkins Hall</option>
+        </select>
+        <br>
+        <label for="dropoff-location">Drop-off Location:</label>
+        <select id="dropoff-location">
+            <option value="">Select Drop-off Location</option>
+            <option value="Angel College Center">Angel College Center</option>
+            <option value="Wilson Hall">Wilson Hall</option>
+            <option value="Hawkins Hall">Hawkins Hall</option>
+        </select>
+        <br>
+        <div class="bike-list">
+            <div class="bike">
+                <h3>E-Bike Model 1</h3>
+                <p>Range: 20 miles</p>
+                <p>Price: $5/hour</p>
+                <button onclick="addToCart('E-Bike Model 1', 5)">Add to Cart</button>
+            </div>
+            <div class="bike">
+                <h3>E-Bike Model 2</h3>
+                <p>Range: 25 miles</p>
+                <p>Price: $6/hour</p>
+                <button onclick="addToCart('E-Bike Model 2', 6)">Add to Cart</button>
+            </div>
+            <div class="bike">
+                <h3>E-Bike Model 3</h3>
+                <p>Range: 30 miles</p>
+                <p>Price: $7/hour</p>
+                <button onclick="addToCart('E-Bike Model 3', 7)">Add to Cart</button>
+            </div>
+        </div>
+        <div class="cart">
+            <h3>Your Cart</h3>
+            <ul id="cart-items"></ul>
+            <button onclick="proceedToPayment()">Proceed to Payment</button>
+        </div>
+    </div>
+</body>
+</html>
